@@ -261,6 +261,52 @@ RSpec.describe Channel::Driver::Smtp do
 
     it_behaves_like 'using BCC'
 
+    context 'with an IMAP Sent copy configured' do
+      let(:sent_copy_driver) { instance_double(Channel::Driver::ImapSentCopy, append: nil) }
+
+      before do
+        channel.preferences[:imap_sent_copy] = {
+          enabled: true,
+          folder:  'Sent Items',
+        }
+        channel.save!
+
+        allow(Channel::Driver::ImapSentCopy).to receive(:new).and_return(sent_copy_driver)
+        allow_any_instance_of(Mail::Message).to receive(:deliver) { |mail| mail }
+      end
+
+      it 'appends the delivered message using the existing inbound IMAP account' do
+        channel.deliver({ to: 'customer@example.com', from: 'support@example.com', subject: 'Test', body: 'Message' })
+
+        expect(sent_copy_driver).to have_received(:append).with(
+          include(
+            host:      'imap.example.com',
+            user:      'user@example.com',
+            folder:    'Sent Items',
+            auth_type: 'plain',
+          ),
+          an_instance_of(Mail::Message),
+        )
+      end
+
+      it 'does not fail SMTP delivery when storing the Sent copy fails' do
+        allow(sent_copy_driver).to receive(:append).and_raise(StandardError, 'APPEND failed')
+
+        expect do
+          channel.deliver({ to: 'customer@example.com', from: 'support@example.com', subject: 'Test', body: 'Message' })
+        end.not_to raise_error
+      end
+
+      it 'does not append a Sent copy when the feature is disabled' do
+        channel.preferences[:imap_sent_copy][:enabled] = false
+        channel.save!
+
+        channel.deliver({ to: 'customer@example.com', from: 'support@example.com', subject: 'Test', body: 'Message' })
+
+        expect(sent_copy_driver).not_to have_received(:append)
+      end
+    end
+
     context 'when an error is raised', aggregate_failures: true do
       before do
         allow_any_instance_of(Mail::Message).to receive(:deliver).and_raise(error)

@@ -126,6 +126,11 @@ send via account
 
     refresh_xoauth2!
 
+    adapter_options = adapter_options.deep_dup
+    if (imap_sent_copy_options = imap_sent_copy_options_for(adapter))
+      adapter_options[:imap_sent_copy] = imap_sent_copy_options
+    end
+
     driver_class    = self.class.driver_class(adapter)
     driver_instance = driver_class.new
     result = driver_instance.deliver(adapter_options, params, notification)
@@ -150,6 +155,25 @@ send via account
 
     raise DeliveryError.new(mark_as_error_message(adapter, error), error)
   end
+
+  def imap_sent_copy_options_for(adapter)
+    config = preferences[:imap_sent_copy]
+
+    return if !adapter.to_s.casecmp?('smtp')
+    return if !config.is_a?(Hash)
+    return if !ActiveModel::Type::Boolean.new.cast(config[:enabled])
+    return if !options.dig(:inbound, :adapter).to_s.casecmp?('imap')
+
+    inbound_options = options.dig(:inbound, :options)
+
+    return if !inbound_options.is_a?(Hash)
+
+    inbound_options
+      .slice(:host, :port, :ssl, :ssl_verify, :user, :password, :auth_type)
+      .merge(folder: config[:folder].presence || 'Sent')
+  end
+
+  private :imap_sent_copy_options_for
 
 =begin
 

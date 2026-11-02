@@ -36,6 +36,9 @@ class Channel::Driver::Smtp < Channel::Driver::BaseEmailOutbound
     # return if we run import mode
     return if Setting.get('import_mode')
 
+    options = options.deep_dup
+    imap_sent_copy_options = options.delete(:imap_sent_copy)
+
     options = prepare_options(options, attr)
 
     attr = prepare_message_attrs(attr, notification)
@@ -44,7 +47,11 @@ class Channel::Driver::Smtp < Channel::Driver::BaseEmailOutbound
 
     Certificate::ApplySSLCertificates.ensure_fresh_ssl_context if options[:ssl] || options[:enable_starttls_auto]
 
-    deliver_mail(attr, notification, :smtp, smtp_params)
+    mail = deliver_mail(attr, notification, :smtp, smtp_params)
+
+    append_imap_sent_copy(mail, imap_sent_copy_options) if imap_sent_copy_options.present?
+
+    mail
   end
 
   def prepare_options(options, attr)
@@ -115,6 +122,12 @@ class Channel::Driver::Smtp < Channel::Driver::BaseEmailOutbound
   end
 
   private
+
+  def append_imap_sent_copy(mail, options)
+    Channel::Driver::ImapSentCopy.new.append(options, mail)
+  rescue => e
+    Rails.logger.error { "Could not store sent email via IMAP: #{e.class}: #{e.message}" }
+  end
 
   def server_identifier(options)
     options[:address].to_s
