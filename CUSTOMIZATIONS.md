@@ -107,6 +107,14 @@ The following entries describe deployment state at a high level. Database values
 - Verified source syntax, application services, the local web endpoint, driver loading, and private runtime configuration.
 - Verified a controlled SMTP delivery succeeded and exactly one matching Message-ID was present in the IMAP Sent folder.
 
+### 2026-11-02 — Date and time presentation
+
+- Changed the default English interface locale from US to UK formatting.
+- Updated active users explicitly using US English to use UK English.
+- Kept full timestamp display enabled.
+- Preserved the configured timezone and all stored date and time values.
+- Created a private pre-change settings backup outside the repository.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
