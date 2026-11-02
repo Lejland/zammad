@@ -20,7 +20,7 @@ Use neutral examples such as `support@example.com` and deployment placeholders s
 
 ### Copy SMTP deliveries to an IMAP Sent folder
 
-Status: deployed to a test environment after isolated runtime and health checks; controlled delivery verification is pending. Deployment configuration is intentionally not stored in Git.
+Status: deployed and verified end to end in a test environment. Deployment configuration is intentionally not stored in Git.
 
 The feature is configured per classic email account. After SMTP accepts a message, Zammad appends the same serialized MIME message to the configured IMAP folder and marks it as seen.
 
@@ -105,6 +105,7 @@ The following entries describe deployment state at a high level. Database values
 - Created a private pre-deployment rollback backup outside the repository.
 - Deployed the generic runtime files and enabled the feature for the target test channel.
 - Verified source syntax, application services, the local web endpoint, driver loading, and private runtime configuration.
+- Verified a controlled SMTP delivery succeeded and exactly one matching Message-ID was present in the IMAP Sent folder.
 
 ## Upgrade procedure
 
