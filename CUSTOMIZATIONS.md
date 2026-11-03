@@ -123,6 +123,15 @@ The following entries describe deployment state at a high level. Database values
 - Ran the supported object-manager migration and verified application health.
 - Created a private pre-change attribute backup outside the repository.
 
+### 2026-11-03 — Original-email HTML download filenames
+
+- Added the ticket number to filenames produced by the original-email HTML download action.
+- Used the generic format `Ticket-<number>-message.html`.
+- Kept ordinary HTML attachments and raw email downloads unchanged.
+- Added focused request coverage for both renamed and unaffected downloads.
+- Created a private pre-deployment rollback backup outside the repository.
+- Verified the deployed filename logic against an existing original-email attachment and confirmed application health.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
