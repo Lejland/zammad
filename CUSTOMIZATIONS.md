@@ -115,6 +115,14 @@ The following entries describe deployment state at a high level. Database values
 - Preserved the configured timezone and all stored date and time values.
 - Created a private pre-change settings backup outside the repository.
 
+### 2026-11-03 — Ticket classification field visibility
+
+- Restored agent visibility for the request classification and service category fields on ticket creation and editing screens.
+- Kept both fields hidden from customer screens.
+- Preserved the existing field definitions, selectable values, and stored ticket values.
+- Ran the supported object-manager migration and verified application health.
+- Created a private pre-change attribute backup outside the repository.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
