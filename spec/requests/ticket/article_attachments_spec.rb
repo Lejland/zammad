@@ -20,15 +20,18 @@ RSpec.describe 'Ticket Article Attachments', authenticated_as: -> { agent }, typ
       let(:store_file_content_type) { 'text/plain' }
       let(:store_file_content) { 'some content' }
       let(:store_file_name)    { 'some_file.txt' }
+      let(:store_file_preferences) do
+        {
+          'Content-Type' => store_file_content_type,
+        }
+      end
       let!(:store_file) do
         create(:store,
                object:      'Ticket::Article',
                o_id:        article1.id,
                data:        store_file_content,
                filename:    store_file_name,
-               preferences: {
-                 'Content-Type' => store_file_content_type,
-               })
+               preferences: store_file_preferences)
       end
 
       context 'with one article attachment' do
@@ -74,6 +77,35 @@ RSpec.describe 'Ticket Article Attachments', authenticated_as: -> { agent }, typ
       end
 
       context 'with different file content types' do
+        context 'with an original-format HTML email' do
+          let(:store_file_content_type) { 'text/html' }
+          let(:store_file_name)         { 'message.html' }
+          let(:store_file_preferences) do
+            {
+              'Content-Type'    => store_file_content_type,
+              'original-format' => true,
+            }
+          end
+
+          it 'adds the ticket number to the downloaded filename' do
+            get "/api/v1/ticket_attachment/#{ticket1.id}/#{article1.id}/#{store_file.id}?disposition=attachment", params: {}
+
+            expect(response.headers['Content-Disposition']).to include("Ticket-#{ticket1.number}-message.html")
+          end
+        end
+
+        context 'with a regular HTML attachment' do
+          let(:store_file_content_type) { 'text/html' }
+          let(:store_file_name)         { 'document.html' }
+
+          it 'keeps the original filename' do
+            get "/api/v1/ticket_attachment/#{ticket1.id}/#{article1.id}/#{store_file.id}?disposition=attachment", params: {}
+
+            expect(response.headers['Content-Disposition']).to include('document.html')
+            expect(response.headers['Content-Disposition']).not_to include("Ticket-#{ticket1.number}-")
+          end
+        end
+
         context 'without allowed inline file content type' do
           it 'disposition can not be inline' do
             get "/api/v1/ticket_attachment/#{ticket1.id}/#{article1.id}/#{store_file.id}?disposition=inline", params: {}
