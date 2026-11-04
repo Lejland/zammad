@@ -10,6 +10,7 @@ RSpec.describe 'Dashboard', type: :system do
     expect(page).to have_css('.stat-widgets')
     expect(page).to have_css('.js-dashboard-tabs [data-area="stat-widgets"]', text: 'My Stats')
     expect(page).to have_css('.js-dashboard-tabs [data-area="ticket-history-widgets"]', text: 'Ticket history')
+    expect(find('.js-dashboard-search-input').value).to eq('')
     expect(page).to have_no_css('.js-dashboard-tabs [data-area="first-steps-widgets"]')
     expect(page).to have_css('.ticket_waiting_time > div > div.stat-title', text: %r{∅ Waiting time today}i)
     expect(page).to have_css('.ticket_escalation > div > div.stat-title', text: %r{Mood}i)

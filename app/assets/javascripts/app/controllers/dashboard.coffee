@@ -3,6 +3,7 @@ class App.Dashboard extends App.Controller
   events:
     'click .js-dashboard-tabs .tab': 'toggle'
     'click .js-intro': 'clues'
+    'keyup .js-dashboard-search-input': 'searchKeyup'
 
   constructor: ->
     super
@@ -41,7 +42,8 @@ class App.Dashboard extends App.Controller
     @ticketHistoryController?.release()
     @ticketHistoryController?.releaseController()
     @ticketHistoryController = new App.DashboardTicketHistory(
-      el: localEl.find('.ticket-history-widgets')
+      el:          localEl.find('.ticket-history-widgets')
+      searchInput: localEl.find('.js-dashboard-search-input')
     )
 
     @html localEl
@@ -122,6 +124,9 @@ class App.Dashboard extends App.Controller
 
     if target is 'ticket-history-widgets'
       @ticketHistoryController?.load(true)
+
+  searchKeyup: (e) =>
+    @ticketHistoryController?.searchKeyup(e)
 
 class DashboardRouter extends App.ControllerPermanent
   @requiredPermission: ['*']
