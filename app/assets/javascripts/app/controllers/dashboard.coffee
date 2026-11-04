@@ -1,7 +1,7 @@
 class App.Dashboard extends App.Controller
   clueAccess: true
   events:
-    'click .tabs .tab': 'toggle'
+    'click .js-dashboard-tabs .tab': 'toggle'
     'click .js-intro': 'clues'
 
   constructor: ->
@@ -38,8 +38,10 @@ class App.Dashboard extends App.Controller
       limit: 25
     )
 
-    new App.DashboardFirstSteps(
-      el: localEl.find('.first-steps-widgets')
+    @ticketHistoryController?.release()
+    @ticketHistoryController?.releaseController()
+    @ticketHistoryController = new App.DashboardTicketHistory(
+      el: localEl.find('.ticket-history-widgets')
     )
 
     @html localEl
@@ -112,11 +114,14 @@ class App.Dashboard extends App.Controller
     false
 
   toggle: (e) =>
-    @$('.tabs .tab').removeClass('active')
-    $(e.target).addClass('active')
-    target = $(e.target).data('area')
+    @$('.js-dashboard-tabs .tab').removeClass('active')
+    $(e.currentTarget).addClass('active')
+    target = $(e.currentTarget).data('area')
     @$('.tab-content').addClass('hidden')
     @$(".tab-content.#{target}").removeClass('hidden')
+
+    if target is 'ticket-history-widgets'
+      @ticketHistoryController?.load(true)
 
 class DashboardRouter extends App.ControllerPermanent
   @requiredPermission: ['*']

@@ -132,6 +132,18 @@ The following entries describe deployment state at a high level. Database values
 - Created a private pre-deployment rollback backup outside the repository.
 - Verified the deployed filename logic against an existing original-email attachment and confirmed application health.
 
+### 2026-11-04 — Dashboard ticket history
+
+- Replaced the visible First Steps dashboard tab with Ticket history for users who can access the agent dashboard.
+- Reused the existing permission-aware wildcard ticket search and the standard ticket list columns.
+- Added remote sorting and pagination in pages of 50 tickets.
+- Kept My Stats available as the default dashboard tab.
+- Added a Ticket history search field that opens the normal full search after a non-empty query is confirmed.
+- Kept the existing global search behavior unchanged.
+- Removed only obsolete First Steps browser coverage; the underlying First Steps backend code remains present.
+- Changed no ticket records or database schema.
+- Created private pre-deployment source and compiled-asset rollback backups outside the repository.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
