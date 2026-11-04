@@ -15,9 +15,15 @@ class App.DashboardTicketHistory extends App.Controller
     @query = '*'
     @model = 'Ticket'
     @results = {}
-    @states = {}
-    for model in @constructor.models
-      @states[model] = { page: 0 }
+    @states =
+      Ticket:
+        page:           0
+        orderBy:        'created_at'
+        orderDirection: 'DESC'
+      User:
+        page:           0
+        orderBy:        'firstname'
+        orderDirection: 'ASC'
 
     @globalSearch = new App.GlobalSearch(
       render: @renderResult

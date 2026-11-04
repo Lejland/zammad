@@ -32,6 +32,7 @@ RSpec.describe 'Dashboard ticket history', authenticated_as: :authenticate, sear
       expect(page).to have_link(ticket.number)
       expect(page).to have_text(ticket.title)
       expect(page).to have_no_text(hidden_ticket.title)
+      expect(page).to have_css('[data-column-key="created_at"] .table-sort-arrow')
 
       find('[data-column-key="title"] .js-sort').click
       expect(page).to have_css('.table-sort-arrow')
@@ -39,6 +40,7 @@ RSpec.describe 'Dashboard ticket history', authenticated_as: :authenticate, sear
       find('.js-ticket-history-tab[data-tab-content="User"]').click
       expect(page).to have_text(result_user.firstname)
       expect(page).to have_text(result_user.lastname)
+      expect(page).to have_css('[data-column-key="firstname"] .table-sort-arrow')
 
       find('[data-column-key="login"] .js-sort').click
       expect(page).to have_css('.table-sort-arrow')

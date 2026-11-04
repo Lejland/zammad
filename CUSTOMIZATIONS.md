@@ -138,6 +138,7 @@ The following entries describe deployment state at a high level. Database values
 - Reused the existing permission-aware wildcard search while keeping the shared Dashboard search field visually empty.
 - Kept the shared search field visible on both My Stats and Ticket history.
 - Added Ticket and User result tabs with independent remote sorting and pagination in pages of 50 results.
+- Sorted Tickets by newest creation date and Users by first name by default.
 - Used the standard Ticket and User table columns.
 - Kept My Stats available as the default dashboard tab.
 - Opened the normal full search after a non-empty shared Dashboard query is confirmed.
