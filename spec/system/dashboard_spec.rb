@@ -8,30 +8,15 @@ RSpec.describe 'Dashboard', type: :system do
     visit 'dashboard'
 
     expect(page).to have_css('.stat-widgets')
+    expect(page).to have_css('.js-dashboard-tabs [data-area="stat-widgets"]', text: 'My Stats')
+    expect(page).to have_css('.js-dashboard-tabs [data-area="ticket-history-widgets"]', text: 'Ticket history')
+    expect(page).to have_no_css('.js-dashboard-tabs [data-area="first-steps-widgets"]')
     expect(page).to have_css('.ticket_waiting_time > div > div.stat-title', text: %r{∅ Waiting time today}i)
     expect(page).to have_css('.ticket_escalation > div > div.stat-title', text: %r{Mood}i)
     expect(page).to have_css('.ticket_channel_distribution > div > div.stat-title', text: %r{Channel Distribution}i)
     expect(page).to have_css('.ticket_load_measure > div > div.stat-title', text: %r{Assigned}i)
     expect(page).to have_css('.ticket_in_process > div > div.stat-title', text: %r{My tickets in process}i)
     expect(page).to have_css('.ticket_reopen > div > div.stat-title', text: %r{Reopening rate}i)
-  end
-
-  context 'when customer role is named different', authenticated_as: :authenticate do
-    def authenticate
-      Role.find_by(name: 'Customer').update(name: 'Public')
-      true
-    end
-
-    it 'invites a customer user' do
-      visit 'dashboard'
-      find('div.tab[data-area=first-steps-widgets]').click
-      find('.js-inviteCustomer').click
-      fill_in 'firstname', with: 'Nick'
-      fill_in 'lastname', with: 'Braun'
-      fill_in 'Email', with: 'nick.braun@zammad.org'
-      click_on 'Invite'
-      expect(User.find_by(firstname: 'Nick').roles).to eq([Role.find_by(name: 'Public')])
-    end
   end
 
   context 'Session Timeout' do
