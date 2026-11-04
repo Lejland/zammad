@@ -2,25 +2,14 @@
 
 <div class="detail-search ticket-history">
   <div class="detail-search-header">
-    <div class="searchfield">
-      <input
-        class="js-ticket-history-search form-control"
-        name="query"
-        aria-label="<%- @Ti('Search') %>"
-        placeholder="<%- @Ti('Find what you\'re looking for, e.g. \"search phrase\"') %>"
-        value="<%- @query %>"
-        type="search"
-        autocomplete="off">
-      <%- @Icon('magnifier') %>
-      <div class="search-loader">
-        <div class="small loading icon"></div>
-      </div>
-    </div>
-
     <div class="tabs tabs-wide">
-      <div class="tab active">
+      <div class="tab active js-ticket-history-tab" data-tab-content="Ticket">
         <span class="tab-name"><%- @T('Ticket') %></span>
-        <span class="tab-badge js-ticket-history-counter">0</span>
+        <span class="tab-badge js-ticket-history-counter-Ticket">0</span>
+      </div>
+      <div class="tab js-ticket-history-tab" data-tab-content="User">
+        <span class="tab-name"><%- @T('User') %></span>
+        <span class="tab-badge js-ticket-history-counter-User">0</span>
       </div>
     </div>
   </div>
