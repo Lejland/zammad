@@ -55,7 +55,7 @@ RSpec.describe 'Ticket zoom', type: :system do
       visit "#ticket/zoom/#{ticket.id}"
     end
 
-    it 'keeps the note hint and uploads through a left-side icon' do
+    it 'keeps attachments at the bottom and uploads through a left-side icon' do
       within(:active_content) do
         expect(page).to have_text('Enter Note')
         expect(page).to have_no_text('select attachment…')
@@ -75,12 +75,35 @@ RSpec.describe 'Ticket zoom', type: :system do
         expect(page).to have_css('.js-attachmentControl:not(.is-hidden) .icon-paperclip')
         expect(page).to have_text('mail001.box')
 
+        body_height = page.evaluate_script(
+          "document.querySelector('.content.active .article-new .articleNewEdit-body').getBoundingClientRect().height"
+        )
+        expect(body_height).to be >= 100
+
         find('.js-attachmentControl input[type="file"]', visible: :all)
           .set(Rails.root.join('test/data/mail/mail002.box'))
 
         expect(page).to have_css('.attachments .attachment', count: 2)
 
-        find('.articleNewEdit-body').send_keys('Reply text')
+        attachment_bottom_gap = page.evaluate_script(<<~JAVASCRIPT)
+          (() => {
+            const composer = document.querySelector('.content.active .article-new')
+            const bubble = composer.querySelector('.textBubble')
+            const attachments = composer.querySelector('.attachments')
+            return Math.round(bubble.getBoundingClientRect().bottom - attachments.getBoundingClientRect().bottom)
+          })()
+        JAVASCRIPT
+        expect(attachment_bottom_gap).to be <= 2
+
+        body = find('.articleNewEdit-body')
+        body.click
+        expect(page).to have_no_css('.attachmentPlaceholder-hint', visible: true)
+
+        body.send_keys('   ')
+        expect(page).to have_css('.textBubble.has-attachments.has-no-body')
+        expect(page).to have_no_css('.attachmentPlaceholder-hint', visible: true)
+
+        body.send_keys('Reply text')
 
         expect(page).to have_css('.textBubble.has-attachments:not(.has-no-body)')
         expect(page).to have_no_css('.attachmentPlaceholder-hint', visible: true)
