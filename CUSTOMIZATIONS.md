@@ -147,6 +147,25 @@ The following entries describe deployment state at a high level. Database values
 - Changed no ticket records or database schema.
 - Created private pre-deployment source and compiled-asset rollback backups outside the repository.
 
+### 2026-11-06 — HTML signature import and spacing
+
+- Added HTML and HTM file selection to the existing signature administration form.
+- Preserved supported inline formatting, placeholders, and embedded PNG, JPEG, GIF, and WebP images.
+- Downloaded supported remote images server-side and passed them through Zammad's existing rich-text attachment handling.
+- Rejected executable markup, unsupported image data, oversized sources, oversized images, and private or local image hosts by default.
+- Allowed deployment-specific private image hosts only through the `ZAMMAD_SIGNATURE_HTML_IMPORT_ALLOWED_PRIVATE_HOSTS` environment variable.
+- Stored the imported source and filename so administrators can reopen and replace an uploaded signature.
+- Reduced composer-added signature separation by one line without modifying stored signature HTML.
+- Kept uploaded signatures, filenames, image assets, private hostnames, and branding outside the repository.
+
+### 2026-11-06 — Ticket composer attachment icon
+
+- Kept the existing Enter Note hint in the composer.
+- Replaced the visible select-attachment text with an accessible paperclip control in the left action rail.
+- Reused the existing file input, upload cache endpoint, progress display, cancellation, drag-and-drop handling, attachment limits, and completion callbacks.
+- Kept attachment availability tied to the selected article type.
+- Added focused browser coverage for icon visibility, accessibility, upload behavior, and translated labels.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
