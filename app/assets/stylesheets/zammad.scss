@@ -8147,22 +8147,26 @@ a.list-group-item.active > .badge,
 }
 
 .article-new .textBubble.has-attachments {
+  padding-bottom: 0 !important;
+
+  .attachments:not(:empty) {
+    margin: 6px -12px 0;
+    padding: 6px 5px;
+  }
+
   &.has-no-body {
     .attachmentPlaceholder-hint {
       opacity: 1 !important;
     }
-
-    .articleNewEdit-body {
-      min-height: 20px !important;
-    }
-
-    .attachments:not(:empty) {
-      margin: 6px -12px 0;
-      padding: 6px 5px;
-    }
   }
 
   &:not(.has-no-body) .attachmentPlaceholder-hint {
+    opacity: 0 !important;
+  }
+}
+
+.article-new .textBubble:has(.articleNewEdit-body:focus) {
+  .attachmentPlaceholder-hint {
     opacity: 0 !important;
   }
 }
