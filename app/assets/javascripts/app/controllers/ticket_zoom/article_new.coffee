@@ -671,14 +671,6 @@ class App.TicketZoomArticleNew extends App.Controller
         duration: 300
         easing: 'easeOutQuad'
 
-    # move attachment text to the left bottom (bottom happens automatically)
-    @attachmentPlaceholder.velocity
-      properties:
-        translateX: -@attachmentInputHolder.position().left + 'px'
-      options:
-        duration: duration
-        easing: 'easeOutQuad'
-
     @attachmentHint.velocity
       properties:
         opacity: 0
@@ -711,13 +703,6 @@ class App.TicketZoomArticleNew extends App.Controller
           duration: 300
           easing: 'easeOutQuad'
           complete: => @textBubbleFooter.css(opacity: 1)
-
-      @attachmentPlaceholder.velocity
-        properties:
-          translateX: 0
-        options:
-          duration: 300
-          easing: 'easeOutQuad'
 
       @attachmentHint.velocity
         properties:
