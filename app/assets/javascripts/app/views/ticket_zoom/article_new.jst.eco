@@ -97,6 +97,7 @@
 
       <div class="textBubble js-writeArea">
         <div class="bubble-arrow"></div>
+        <span class="attachmentPlaceholder-hint"><%- @T('Enter Note') %></span>
         <div class="js-textarea richtext-content articleNewEdit-body" dir="auto" contenteditable="true" data-name="body"><%- @article.body %></div>
         <!-- .textBubble grows with textarea (and expanding clone) -->
         <div class="textBubble-footer js-textSizeLimit">
@@ -105,7 +106,6 @@
         </div>
         <div class="attachments"></div>
         <div class="article-attachment">
-          <span class="attachmentPlaceholder-hint"><%- @T('Enter Note') %></span>
           <div class="attachmentUpload hide">
             <div class="horizontal">
               <div class="u-highlight">

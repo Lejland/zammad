@@ -8138,6 +8138,35 @@ a.list-group-item.active > .badge,
   cursor: text;
 }
 
+.article-new .attachmentPlaceholder-hint {
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.article-new .textBubble.has-attachments {
+  &.has-no-body {
+    .attachmentPlaceholder-hint {
+      opacity: 1 !important;
+    }
+
+    .articleNewEdit-body {
+      min-height: 20px !important;
+    }
+
+    .attachments:not(:empty) {
+      margin: 6px -12px 0;
+      padding: 6px 5px;
+    }
+  }
+
+  &:not(.has-no-body) .attachmentPlaceholder-hint {
+    opacity: 0 !important;
+  }
+}
+
 .articleNewEdit-body {
   width: 100%;
   position: relative;
