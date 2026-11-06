@@ -44,6 +44,19 @@
       </div>
     </div>
     <% end %>
+    <div class="editControls-item is-hidden js-attachmentControl">
+      <div class="editControls-iconHolder attachmentPlaceholder">
+        <div class="editControls-icon attachmentPlaceholder-inputHolder fileUpload">
+          <% uid =  _.uniqueId('fileUpload_') %>
+          <input multiple="multiple" type="file" name="file" id="<%- uid %>">
+          <label class="attachmentPlaceholder-label" for="<%- uid %>"
+                 aria-label="<%- @Ti('select attachment…') %>"
+                 title="<%- @Ti('select attachment…') %>">
+            <%- @Icon('paperclip') %>
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="article-content bubble-gap">
     <div class="internal-border">
@@ -92,16 +105,7 @@
         </div>
         <div class="attachments"></div>
         <div class="article-attachment">
-          <div class="attachmentPlaceholder">
-            <span class="attachmentPlaceholder-hint"><%- @T('Enter Note or') %></span>
-            <span class="attachmentPlaceholder-inputHolder fileUpload">
-              <% uid =  _.uniqueId('fileUpload_') %>
-              <input multiple="multiple" type="file" name="file" id="<%- uid %>">
-              <label class="attachmentPlaceholder-label" for="<%- uid %>">
-                <%- @T('select attachment…') %>
-              </label>
-            </span>
-          </div>
+          <span class="attachmentPlaceholder-hint"><%- @T('Enter Note') %></span>
           <div class="attachmentUpload hide">
             <div class="horizontal">
               <div class="u-highlight">

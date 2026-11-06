@@ -48,6 +48,33 @@ RSpec.describe 'Ticket zoom', type: :system do
     end
   end
 
+  context 'with the composer attachment control' do
+    let(:ticket) { create(:ticket, group: Group.find_by(name: 'Users')) }
+
+    before do
+      visit "#ticket/zoom/#{ticket.id}"
+    end
+
+    it 'keeps the note hint and uploads through a left-side icon' do
+      within(:active_content) do
+        expect(page).to have_text('Enter Note')
+        expect(page).to have_no_text('select attachment…')
+
+        find('.js-writeArea').click(x: 5, y: 5)
+
+        expect(page).to have_css('.js-attachmentControl .icon-paperclip')
+        expect(page).to have_css(
+          '.js-attachmentControl .attachmentPlaceholder-label[aria-label="select attachment…"]'
+        )
+
+        find('.js-attachmentControl input[type="file"]', visible: :all)
+          .set(Rails.root.join('test/data/mail/mail001.box'))
+
+        expect(page).to have_text('mail001.box')
+      end
+    end
+  end
+
   context 'when using the sidebar' do
     let(:ticket) { create(:ticket, group: Group.find_by(name: 'Users'), customer: create(:customer, :with_org)) }
 
@@ -802,7 +829,10 @@ RSpec.describe 'Ticket zoom', type: :system do
       click_on 'Submit'
 
       visit "#ticket/zoom/#{ticket.id}"
-      expect(page).to have_text(Translation.translate('de-de', 'select attachment…'))
+      expect(page).to have_css(
+        ".js-attachmentControl .attachmentPlaceholder-label[aria-label=\"#{Translation.translate('de-de', 'select attachment…')}\"]",
+        visible: :all,
+      )
     end
 
     def expect_upload_and_text
