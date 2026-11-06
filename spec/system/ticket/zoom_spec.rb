@@ -70,7 +70,20 @@ RSpec.describe 'Ticket zoom', type: :system do
         find('.js-attachmentControl input[type="file"]', visible: :all)
           .set(Rails.root.join('test/data/mail/mail001.box'))
 
+        expect(page).to have_css('.textBubble.has-attachments.has-no-body')
+        expect(page).to have_css('.attachmentPlaceholder-hint', text: 'Enter Note')
+        expect(page).to have_css('.js-attachmentControl:not(.is-hidden) .icon-paperclip')
         expect(page).to have_text('mail001.box')
+
+        find('.js-attachmentControl input[type="file"]', visible: :all)
+          .set(Rails.root.join('test/data/mail/mail002.box'))
+
+        expect(page).to have_css('.attachments .attachment', count: 2)
+
+        find('.articleNewEdit-body').send_keys('Reply text')
+
+        expect(page).to have_css('.textBubble.has-attachments:not(.has-no-body)')
+        expect(page).to have_no_css('.attachmentPlaceholder-hint', visible: true)
       end
     end
   end

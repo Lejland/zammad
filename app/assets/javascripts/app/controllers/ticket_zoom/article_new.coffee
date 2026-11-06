@@ -24,11 +24,12 @@ class App.TicketZoomArticleNew extends App.Controller
     'click .js-toggleVisibility':    'toggleVisibility'
     'click .js-articleTypeItem':     'selectArticleType'
     'click .js-selectedArticleType': 'showSelectableArticleType'
+    'click .js-attachmentControl':   'stopPropagation'
     'click .js-mail-inputs':         'stopPropagation'
     'click .js-writeArea':           'propagateOpenTextarea'
     'click .list-entry-type div':    'changeType'
     'focus .js-textarea':            'openTextarea'
-    'input .js-textarea':            'updateLetterCount'
+    'input .js-textarea':            'handleTextareaInput'
     'blur .js-textarea':             'blurTextarea'
     'click .js-active-toggle':       'toggleButton'
     'click .js-active-toggle-type':  'toggleTypeButton'
@@ -244,6 +245,7 @@ class App.TicketZoomArticleNew extends App.Controller
       canUploadFiles:         @canUploadFiles
 
       onFileStartCallback: =>
+        @openTextarea()
         @richTextUploadStartCallback?()
 
       onFileCompletedCallback: (response) =>
@@ -587,6 +589,18 @@ class App.TicketZoomArticleNew extends App.Controller
     event.stopPropagation()
     @textarea.trigger('focus')
 
+  handleTextareaInput: =>
+    @updateLetterCount()
+    @updateComposerAttachmentState()
+
+  updateComposerAttachmentState: =>
+    hasAttachments = @attachments.length > 0
+    hasBody        = !!@textarea.text().trim()
+
+    @textBubble
+      .toggleClass('has-attachments', hasAttachments)
+      .toggleClass('has-no-body', !hasBody)
+
   updateLetterCount: =>
     return if !@maxTextLength
     return if !@warningTextLength
@@ -915,6 +929,8 @@ class App.TicketZoomArticleNew extends App.Controller
     @checkBodyEnsureNoCaption() || @checkBodyAllowNoCaption()
 
   evaluateAttachmentsList: =>
+    @updateComposerAttachmentState()
+
     @toggleBodyEnsureNoCaption @checkBodyEnsureNoCaption()
 
     @attachmentsHolder.find('.alert--danger').remove()
