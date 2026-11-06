@@ -75,6 +75,19 @@ RSpec.describe 'Ticket zoom', type: :system do
         expect(page).to have_css('.js-attachmentControl:not(.is-hidden) .icon-paperclip')
         expect(page).to have_text('mail001.box')
 
+        attachment = find('.attachments .attachment', text: 'mail001.box')
+        attachment.hover
+        attachment.find('.attachment-delete', visible: true).click
+
+        expect(page).to have_no_css('.attachments .attachment')
+        expect(page).to have_no_css('.textBubble.has-attachments')
+
+        find('.js-attachmentControl input[type="file"]', visible: :all)
+          .set(Rails.root.join('test/data/mail/mail001.box'))
+
+        expect(page).to have_css('.textBubble.has-attachments.has-no-body')
+        expect(page).to have_text('mail001.box')
+
         body_height = page.evaluate_script(
           "document.querySelector('.content.active .article-new .articleNewEdit-body').getBoundingClientRect().height"
         )
