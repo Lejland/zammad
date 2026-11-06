@@ -240,7 +240,7 @@ class App.TicketZoomArticleNew extends App.Controller
       uploadUrl:              "#{App.Config.get('api_path')}/upload_caches/#{@form_id}"
       dropContainer:          @$('.article-add')
       cancelContainer:        @cancelContainer
-      inputField:             @$('.article-attachment input')
+      inputField:             @$('.js-attachmentControl input')
       canUploadFiles:         @canUploadFiles
 
       onFileStartCallback: =>
@@ -249,7 +249,7 @@ class App.TicketZoomArticleNew extends App.Controller
       onFileCompletedCallback: (response) =>
         @attachments.push response.data
         @renderAttachment(response.data)
-        @$('.article-attachment input').val('')
+        @$('.js-attachmentControl input').val('')
 
         @richTextUploadRenderCallback?(@attachments)
 
@@ -519,11 +519,11 @@ class App.TicketZoomArticleNew extends App.Controller
         @$('.form-group').addClass('hide')
         for name in articleType.attributes
           @$("[name=#{name}]").closest('.form-group').removeClass('hide')
-        @$('.article-attachment, .attachments, .js-textSizeLimit').addClass('hide')
+        @$('.article-attachment, .attachments, .js-attachmentControl, .js-textSizeLimit').addClass('hide')
         for name in articleType.features
           switch name
             when 'attachment'
-              @$('.article-attachment, .attachments').removeClass('hide')
+              @$('.article-attachment, .attachments, .js-attachmentControl').removeClass('hide')
             when 'body:initials'
               @updateInitials()
             when 'body:limit'

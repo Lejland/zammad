@@ -8050,6 +8050,17 @@ a.list-group-item.active > .badge,
   fill: var(--interactive-muted);
 }
 
+.js-attachmentControl {
+  .attachmentPlaceholder-label {
+    line-height: 0;
+  }
+
+  .icon-paperclip {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 .pop-selector {
   position: absolute;
   top: 0;
