@@ -8203,6 +8203,10 @@ a.list-group-item.active > .badge,
   gap: 16px;
 }
 
+.article-new .article-attachment:has(.attachmentUpload.hide) {
+  pointer-events: none;
+}
+
 .text-tools-dropdown {
   .dropdown-menu {
     min-width: auto;
