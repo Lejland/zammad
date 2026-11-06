@@ -375,7 +375,7 @@ class EmailReply extends App.Controller
 
         if effectiveSigPosition is 'top'
           body.prepend(sigEl)
-          body.prepend('<br><br>')
+          body.prepend('<br>')
         else
           App.SignatureHelper.appendToBottom(body, sigEl)
       ui.$('[data-name=body]').replaceWith(body)

@@ -26,5 +26,5 @@ class App.SignatureHelper
   # Append signature at the bottom of body, with spacing if needed.
   @appendToBottom: (body, signatureEl) ->
     if !App.Utils.htmlLastLineEmpty(body)
-      body.append('<br><br>')
+      body.append('<br>')
     body.append(signatureEl)
