@@ -7660,28 +7660,6 @@ a.list-group-item.active > .badge,
 
 .textBubble-control {
   display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.textBubble-spellcheck {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin: 0;
-  color: var(--ghost-color);
-  font-size: 12px;
-  font-weight: normal;
-
-  select {
-    max-width: 110px;
-    padding: 1px 18px 1px 4px;
-    border: 1px solid var(--border-alt);
-    border-radius: 3px;
-    background-color: var(--background-secondary);
-    color: var(--text-color);
-    font-size: 12px;
-  }
 }
 
 .textBubble-letterCount:not(.label-danger, .label-warning) {

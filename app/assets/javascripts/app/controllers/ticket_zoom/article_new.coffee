@@ -19,7 +19,6 @@ class App.TicketZoomArticleNew extends App.Controller
     '.editControls-item':                 'editControlItem'
     '.js-letterCount':                    'letterCount'
     '.js-signature':                      'signature'
-    '.js-spellcheckLanguage':             'spellcheckLanguageSelect'
 
   events:
     'click .js-toggleVisibility':    'toggleVisibility'
@@ -32,7 +31,6 @@ class App.TicketZoomArticleNew extends App.Controller
     'focus .js-textarea':            'openTextarea'
     'input .js-textarea':            'handleTextareaInput'
     'blur .js-textarea':             'blurTextarea'
-    'change .js-spellcheckLanguage': 'changeSpellcheckLanguage'
     'click .js-active-toggle':       'toggleButton'
     'click .js-active-toggle-type':  'toggleTypeButton'
 
@@ -52,7 +50,6 @@ class App.TicketZoomArticleNew extends App.Controller
 
     @dragEventCounter = 0
     @attachments      = @defaults.attachments || []
-    @spellcheckLanguage = 'auto'
 
     @render()
 
@@ -108,7 +105,6 @@ class App.TicketZoomArticleNew extends App.Controller
       @type        = 'note'
       @defaults    = {}
       @attachments = []
-      @spellcheckLanguage = 'auto'
       @render()
     )
 
@@ -219,7 +215,6 @@ class App.TicketZoomArticleNew extends App.Controller
       form_id:          @form_id
       isCustomer:       ticket.currentView() is 'customer'
       internalSelector: @internalSelector
-      spellcheckLanguage: @spellcheckLanguage
     )
     @setArticleTypePre(@type)
     @setArticleTypePost(@type)
@@ -241,8 +236,6 @@ class App.TicketZoomArticleNew extends App.Controller
       multiline: true
       maxlength: 150000
     })
-
-    @applySpellcheckLanguage()
 
     new App.Html5Upload(
       uploadUrl:              "#{App.Config.get('api_path')}/upload_caches/#{@form_id}"
@@ -626,22 +619,6 @@ class App.TicketZoomArticleNew extends App.Controller
 
   blurTextarea: =>
     App.Event.trigger('ui::ticket::articleNew::change', { ticket_id: @ticket.id })
-
-  changeSpellcheckLanguage: (event) =>
-    @spellcheckLanguage = @$(event.currentTarget).val() || 'auto'
-    @applySpellcheckLanguage()
-    @textarea.trigger('focus')
-
-  applySpellcheckLanguage: =>
-    return if !@textarea
-
-    @textarea.attr('spellcheck', 'true')
-    @spellcheckLanguageSelect?.val(@spellcheckLanguage)
-
-    if @spellcheckLanguage is 'auto'
-      @textarea.removeAttr('lang')
-    else
-      @textarea.attr('lang', @spellcheckLanguage)
 
   updateInitials: (value) =>
     if value is undefined
