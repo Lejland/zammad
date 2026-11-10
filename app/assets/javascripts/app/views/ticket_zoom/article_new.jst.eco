@@ -98,11 +98,21 @@
       <div class="textBubble js-writeArea">
         <div class="bubble-arrow"></div>
         <span class="attachmentPlaceholder-hint"><%- @T('Enter Note') %></span>
-        <div class="js-textarea richtext-content articleNewEdit-body" dir="auto" contenteditable="true" data-name="body"><%- @article.body %></div>
+        <div class="js-textarea richtext-content articleNewEdit-body" dir="auto" contenteditable="true" spellcheck="true" data-name="body"><%- @article.body %></div>
         <!-- .textBubble grows with textarea (and expanding clone) -->
         <div class="textBubble-footer js-textSizeLimit">
           <div class="textBubble-signatur"><span class="js-signature"></span></div>
-          <div class="textBubble-letterCount js-letterCount"></div>
+          <div class="textBubble-control">
+            <label class="textBubble-spellcheck" title="<%- @Ti('Spell-check language') %>">
+              <span><%- @T('Language') %></span>
+              <select class="js-spellcheckLanguage" aria-label="<%- @Ti('Spell-check language') %>">
+                <option value="auto"<% if @spellcheckLanguage == 'auto': %> selected<% end %>>Auto / Mixed</option>
+                <option value="da"<% if @spellcheckLanguage == 'da': %> selected<% end %>>Dansk</option>
+                <option value="en"<% if @spellcheckLanguage == 'en': %> selected<% end %>>English</option>
+              </select>
+            </label>
+            <div class="textBubble-letterCount js-letterCount"></div>
+          </div>
         </div>
         <div class="attachments"></div>
         <div class="article-attachment">
