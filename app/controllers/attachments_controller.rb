@@ -11,7 +11,7 @@ class AttachmentsController < ApplicationController
     view_type = params[:preview] ? 'preview' : nil
     send_data(
       download_file.content(view_type),
-      filename:    download_file.filename,
+      filename:    ticket_download_filename(ticket_for_download),
       type:        download_file.content_type,
       disposition: download_file.disposition
     )

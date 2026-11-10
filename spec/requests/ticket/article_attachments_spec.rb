@@ -98,11 +98,20 @@ RSpec.describe 'Ticket Article Attachments', authenticated_as: -> { agent }, typ
           let(:store_file_content_type) { 'text/html' }
           let(:store_file_name)         { 'document.html' }
 
-          it 'keeps the original filename' do
+          it 'adds the ticket number to the downloaded filename' do
             get "/api/v1/ticket_attachment/#{ticket1.id}/#{article1.id}/#{store_file.id}?disposition=attachment", params: {}
 
-            expect(response.headers['Content-Disposition']).to include('document.html')
-            expect(response.headers['Content-Disposition']).not_to include("Ticket-#{ticket1.number}-")
+            expect(response.headers['Content-Disposition']).to include("Ticket-#{ticket1.number}-document.html")
+          end
+        end
+
+        context 'with an already-prefixed attachment filename' do
+          let(:store_file_name) { "Ticket-#{ticket1.number}-document.txt" }
+
+          it 'does not add the ticket number twice' do
+            get "/api/v1/ticket_attachment/#{ticket1.id}/#{article1.id}/#{store_file.id}?disposition=attachment", params: {}
+
+            expect(response.headers['Content-Disposition'].scan("Ticket-#{ticket1.number}-").count).to eq(1)
           end
         end
 

@@ -33,6 +33,24 @@ module ApplicationController::HasDownload
     raise Exceptions::Forbidden, "Invalid disposition #{disposition} requested. Only #{valid_disposition.join(', ')} are valid."
   end
 
+  def ticket_download_filename(ticket = nil, filename = download_file.filename)
+    return filename if ticket.blank?
+
+    prefix = "Ticket-#{ticket.number}-"
+    return filename if filename.start_with?(prefix)
+
+    "#{prefix}#{filename}"
+  end
+
+  def ticket_for_download
+    return if download_file.store_object&.name != 'Ticket::Article'
+
+    article = Ticket::Article.find_by(id: download_file.o_id)
+    return if article.blank?
+
+    article.ticket
+  end
+
   def set_null_csp
     request.content_security_policy = ActionDispatch::ContentSecurityPolicy.new.tap { |p| p.default_src :none }
   end

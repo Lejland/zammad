@@ -194,7 +194,7 @@ class TicketArticlesController < ApplicationController
     content = download_file.content(params[:view])
     send_data(
       content,
-      filename:    attachment_download_filename(ticket),
+      filename:    ticket_download_filename(ticket),
       type:        download_file.content_type,
       disposition: download_file.disposition
     )
@@ -213,7 +213,7 @@ class TicketArticlesController < ApplicationController
 
     send_data(
       file.content,
-      filename:    file.filename,
+      filename:    ticket_download_filename(article.ticket, file.filename),
       type:        'message/rfc822',
       disposition: 'inline'
     )
@@ -293,17 +293,6 @@ class TicketArticlesController < ApplicationController
   end
 
   private
-
-  def attachment_download_filename(ticket)
-    filename = download_file.filename
-    return filename if download_file.preferences['original-format'] != true
-    return filename if !filename.to_s.downcase.end_with?('.html')
-
-    prefix = "Ticket-#{ticket.number}-"
-    return filename if filename.start_with?(prefix)
-
-    "#{prefix}#{filename}"
-  end
 
   def render_calendar_preview
     render json: Service::Calendar::IcsFile::Parse.with_current_user(current_user).execute(file: download_file), status: :ok

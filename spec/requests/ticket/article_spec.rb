@@ -838,6 +838,10 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
       it 'returns the raw copy of the article' do
         expect(response.body).to eq('This is a test article')
       end
+
+      it 'adds the ticket number to the downloaded filename' do
+        expect(response.headers['Content-Disposition']).to include("Ticket-#{ticket.number}-")
+      end
     end
 
     context 'when article does not have a raw copy' do

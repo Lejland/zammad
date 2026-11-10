@@ -25,6 +25,7 @@ RSpec.describe AttachmentsController, type: :request do
       get "/api/v1/attachments/#{attachment_id}"
 
       expect(response).to have_http_status(:ok)
+      expect(response.headers['Content-Disposition']).not_to include('Ticket-')
     end
 
     # A published answer's attachment is downloadable without any session at all, so a deactivated
@@ -90,6 +91,7 @@ RSpec.describe AttachmentsController, type: :request do
     it 'agent downloads internal article attachment' do
       get "/api/v1/attachments/#{internal_store.id}"
       expect(response).to have_http_status(:ok)
+      expect(response.headers['Content-Disposition']).to include("Ticket-#{ticket.number}-secret.txt")
     end
 
     it 'sends X-Content-Type-Options: nosniff on download' do
