@@ -100,7 +100,7 @@
         <span class="attachmentPlaceholder-hint"><%- @T('Enter Note') %></span>
         <div class="js-textarea richtext-content articleNewEdit-body" dir="auto" contenteditable="true" spellcheck="true" data-name="body"><%- @article.body %></div>
         <!-- .textBubble grows with textarea (and expanding clone) -->
-        <div class="textBubble-footer js-textSizeLimit">
+        <div class="textBubble-footer">
           <div class="textBubble-signatur"><span class="js-signature"></span></div>
           <div class="textBubble-control">
             <label class="textBubble-spellcheck" title="<%- @Ti('Spell-check language') %>">
@@ -111,7 +111,7 @@
                 <option value="en"<% if @spellcheckLanguage == 'en': %> selected<% end %>>English</option>
               </select>
             </label>
-            <div class="textBubble-letterCount js-letterCount"></div>
+            <div class="textBubble-letterCount js-letterCount js-textSizeLimit"></div>
           </div>
         </div>
         <div class="attachments"></div>
