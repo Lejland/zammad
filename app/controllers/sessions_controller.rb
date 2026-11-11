@@ -50,15 +50,21 @@ class SessionsController < ApplicationController
 
     verify_sso_trusted_ip!
 
-    user = begin
-      login = request.env['REMOTE_USER'] ||
-              request.env['HTTP_REMOTE_USER'] ||
-              request.headers['X-Forwarded-User']
-
-      User.lookup(login: login&.downcase)
-    end
+    login = request.env['REMOTE_USER'] ||
+            request.env['HTTP_REMOTE_USER'] ||
+            request.headers['X-Forwarded-User']
 
     raise Exceptions::NotAuthorized, __("Neither an SSO environment variable 'REMOTE_USER' nor a 'X-Forwarded-User' header could be found.") if login.blank?
+
+    user = if request.headers['X-SSO-Provision'] == 'internal'
+             Service::User::SsoJitProvisioning.execute(
+               login:    login,
+               realname: decode_sso_realname(request.headers['X-SSO-Realname-B64']),
+             )
+           else
+             User.identify(login.to_s.downcase)
+           end
+
     raise Exceptions::NotAuthorized, "User '#{login}' could not be found." if user.blank?
 
     session.delete(:switched_from_user_id)
@@ -68,6 +74,15 @@ class SessionsController < ApplicationController
 
     redirect_after_omniauth('/#')
   end
+
+  def decode_sso_realname(value)
+    return if value.blank?
+
+    Base64.urlsafe_decode64(value).force_encoding(Encoding::UTF_8).scrub.first(256)
+  rescue ArgumentError
+    nil
+  end
+  private :decode_sso_realname
 
   # "Delete" a login, aka "log the user out"
   def destroy
