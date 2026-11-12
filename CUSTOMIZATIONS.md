@@ -166,6 +166,60 @@ The following entries describe deployment state at a high level. Database values
 - Kept attachment availability tied to the selected article type.
 - Added focused browser coverage for icon visibility, accessibility, upload behavior, and translated labels.
 
+### 2026-11-10 — Ticket-related download filenames
+
+- Added the ticket number prefix to files downloaded from ticket articles, including attachments, raw email files,
+  and original-email HTML exports.
+- Used the generic format `Ticket-<number>-<original-filename>` and avoided adding the same prefix twice.
+- Kept downloads unrelated to ticket articles unchanged.
+- Added focused request coverage for the shared download helper and ticket article endpoints.
+
+### 2026-11-10 — Ownership request alert
+
+- Added an idempotent setup script for a Request ownership macro and native action triggers.
+- Notified agents with access to the ticket group only when an active ticket has no owner.
+- Removed the temporary request tag after notification and cleared it without email when a ticket is already owned or
+  inactive.
+- Kept recipients, ticket state identifiers, and trigger records in the application database rather than source control.
+
+Generic installation command:
+
+```bash
+zammad run rails runner script/custom/needs_owner_alert.rb
+```
+
+### 2026-11-10 — Browser-managed mixed-language spell-check
+
+- Kept native browser spell-check enabled in each ticket composer.
+- Removed the per-composer language selector after confirming that browser dictionaries provide the reliable
+  mixed-language behavior.
+- Kept spell-check language preferences in the user's browser; no language choice or text is sent to the server by
+  this customization.
+- Preserved the composer attachment layout and upload behavior.
+
+### 2026-11-11 - SSO JIT provisioning and directory alignment
+
+- Extended the existing SSO endpoint with an explicit trusted-proxy marker for
+  just-in-time user provisioning.
+- Matched existing users by normalized email or directory-style short login and
+  created only previously unknown identities.
+- Assigned new users the privately configured default role while preserving all
+  roles on existing agents and administrators.
+- Saved new and reconciled users in bulk-import context so account onboarding or
+  verification email is not queued.
+- Kept token validation, reverse-proxy rules, identity-provider endpoints, TLS,
+  domains, role values, and directory credentials outside this repository.
+- Did not add or configure an LDAP source. Native LDAP synchronization remains a
+  separate optional deployment concern requiring encrypted transport, dedicated
+  credentials, attribute mapping, and lifecycle review.
+- Documented optional short `/signup` and `/login` entry points without storing
+  their deployment-specific host or redirect configuration.
+- Added focused service and request coverage for new-user creation, existing-user
+  matching, role preservation, domain rejection, the provisioning marker, and
+  notification suppression.
+
+See [SSO JIT and Directory Integration](doc/customization/sso_jit_and_directory_integration.md).
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.

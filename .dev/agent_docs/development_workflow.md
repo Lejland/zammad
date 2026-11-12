@@ -1,191 +1,110 @@
 # Development Workflow
 
-## Issue Tracking & Code Hosting
+## Project Boundary
 
-- Issues (bugs, stories, epics) are tracked on **GitHub** — in `zammad/zammad`
-  (public) and private repositories (e.g. `zammad/coordination-desktop-view`).
-- Code is developed on a **self-hosted GitLab** instance.
-- GitHub hosts a **read-only mirror** — synced automatically when public branches
-  like `develop` or `stable` are updated.
-- Branches prefixed with `private/` are **never synced** to GitHub.
+Issues, branches, reviews, and merge requests are managed in this project.
+`integration/customizations` is the customization baseline. Do not configure
+repository mirroring or add a second code-host remote to this checkout.
 
-All branches must start with `private/` to prevent unintended syncing.
+Application code and generic setup scripts belong in Git. Runtime credentials,
+environment-specific settings, operational data, backups, and branding do not.
 
-## Tools
+## Before the Lifecycle: Define the Work
 
-- **GitHub MCP server** — for reading issues, labels, and comments.
-- **`glab` CLI** — for pushing branches, creating merge requests, and other
-  GitLab operations. Authenticated against the self-hosted GitLab instance.
+An issue should explain the problem, expected behavior, acceptance criteria,
+and relevant constraints before implementation begins. Large changes should be
+split into independently testable tasks. Bugs may enter the lifecycle directly
+when reproduction steps and expected behavior are clear.
 
-## Before the lifecycle: the story
-
-The lifecycle below starts at "read the GitHub issue" and assumes a task
-issue already exists that says something useful. Getting there is its own
-stage, and it acts on a **story** rather than on a task:
-
-1. **Refine** — `/refine-story`. Checks whether the story can be planned at
-   all, whether it is really several stories, and whether its acceptance
-   criteria, its use cases and its linked design agree. Proposes the missing
-   criteria and sections, and writes them to the story on confirmation.
-2. **Break down** — `/plan-story`. Cuts a ready story into `Task` and `Spike`
-   sub-issues: a task carries the plan of how to solve it, a spike the question
-   it has to answer. Refuses to plan a story that is not ready.
-3. **Present** — `/present-story`. Explains the prepared work in a sprint
-   planning. Reads only.
-
-The rules all three follow — the definition of ready, how story size is
-judged, the closed list of layers a plan must give a verdict on, and how deep
-a plan may go — are in `.dev/agent_docs/story_planning_rules.md`, the
-counterpart of `code_review_rules.md` at the other end of the lifecycle.
-
-**A bug does not go through this stage.** It enters the lifecycle directly.
-A bug report has no user story and no acceptance criteria by design — the
-template asks for actual and expected behaviour and reproduction steps
-instead — so the definition of ready does not apply to it, and the story
-skills report that rather than demanding something a bug can never have. The
-exception is a bug so large it needs splitting, and that is worth a
-conversation about whether it should be a story.
-
-Note that **"Plan" means two different things**: step 3 of the lifecycle below
-is the technical plan for one task, written by whoever implements it.
-`/plan-story` is the story-level breakdown that produces those tasks.
+The shared planning and review rules are in
+`.dev/agent_docs/story_planning_rules.md` and
+`.dev/agent_docs/code_review_rules.md`.
 
 ## Lifecycle
 
 ### 1. Understand
 
-Read the GitHub issue thoroughly before writing any code. Clarify scope,
-acceptance criteria, and edge cases. If the issue is ambiguous, ask the user
-for clarification rather than guessing.
+Read the issue thoroughly before writing code. Clarify ambiguous scope,
+acceptance criteria, permissions, privacy, accessibility, deployment impact,
+and edge cases.
 
-**Determine the mode.** If the user supplied `--parent <github_issue_url>`,
-this is **attach mode**: the task is part of a larger story whose branch and
-MR already exist. Otherwise, this is **standalone mode**: the task gets its
-own branch and MR. The parent may live in a different repository — parse
-owner + repo + number from the URL, do not assume same-repo.
-
-In attach mode, also:
-
-- Read the parent issue via the GitHub MCP server (it provides context the
-  task issue alone doesn't have).
-- List the parent's sub-issues. Note which are already closed, which are
-  in progress, and who is assigned — this prevents stepping on a colleague's
-  work.
-- Confirm the existing branch is already checked out in the current workspace
-  (Conductor creates the workspace from a branch; the branch is on disk
-  before the workflow starts). If it is not — abort and ask the user.
-
-Then determine **which parts of the codebase the issue affects**:
-
-- Check labels and comments for scope hints (when available).
-- Otherwise, search the codebase for keywords from the issue title and body
-  to locate the relevant component(s).
-- Identify which stack is affected: CoffeeScript frontend, Vue 3 frontend
-  (desktop or mobile), REST backend, GraphQL layer, services, etc.
-- State your conclusion explicitly before moving on, e.g.
-  "This issue affects the CoffeeScript frontend (KB answers component) and
-  the REST controller behind it. I will NOT investigate Vue 3, GraphQL, or
-  unrelated services unless something during research requires it."
-
-This explicit scoping prevents broad codebase exploration in areas the
-issue does not touch.
+Identify which stack is affected: CoffeeScript frontend, Vue 3 frontend, REST,
+GraphQL, Rails services, mail processing, or deployment tooling. State the
+scope explicitly and avoid unrelated exploration.
 
 ### 2. Research
 
-Investigate only the parts of the codebase identified in the Understand
-phase. Delegate broad research to separate agents to keep your main context
-clean. Understand the existing patterns before introducing new ones.
+Inspect existing patterns in the affected area and read the relevant reference
+file from `AGENTS.md`. Check `CUSTOMIZATIONS.md` and recent history for overlap
+with existing custom behavior.
 
-If during research you discover the scope was wrong (e.g. the data turns
-out to come from a service you hadn't considered), update the scope
-explicitly and tell the user before continuing.
+If research changes the scope, update the issue or tell the user before
+continuing.
 
 ### 3. Plan
 
-Identify affected files and outline the approach. For non-trivial changes,
-present the plan to the user before implementing. Consider side effects on
-other parts of the system.
+List the affected files, tests, migration or asset-build needs, risks, and
+rollback approach. Present a plan before non-trivial implementation.
 
 ### 4. Branch
 
-**Standalone mode:** Use the `/prepare-issue-branch` skill to create the
-branch and prepare the commit message. It handles naming conventions, public
-vs. private issue detection, and commit message formatting automatically.
+Create a branch from the current `integration/customizations` baseline:
 
-**Attach mode:** Do _not_ invoke `/prepare-issue-branch`. The story branch
-is already checked out (confirmed in step 1). Instead:
+- `feature/<short-description>`
+- `fix/<short-description>`
+- `docs/<short-description>`
+- `maintenance/<short-description>`
 
-- Run `git fetch origin && git pull --rebase` to align with what colleagues
-  have pushed since you started.
-- If `git pull --rebase` produces conflicts, stop and ask the user to
-  resolve them before continuing.
-- Do not prepare a commit message yet — it will be written in step 8
-  based on what was actually changed.
+Do not make customization changes on the bootstrap `main` branch. Do not
+rewrite or force-push shared history.
 
 ### 5. Implement
 
-Write the code following the patterns described in the relevant agent reference
-docs (graphql_patterns, frontend_patterns, service_patterns, etc.). Read the
-relevant doc before starting implementation — do not read them all upfront.
+Follow existing application patterns and keep the change focused. Preserve
+authorization, translations, accessibility, and unchanged workflows. New
+non-Markdown source files require the established copyright header.
+
+Generic setup scripts must be idempotent. Do not hard-code private values.
 
 ### 6. Test
 
-Run the specific tests affected by your changes. Write new tests for new
-behavior. Never run the full test suite — CI handles comprehensive testing.
+Run the smallest relevant automated tests and add coverage for new behavior or
+regressions. Record exact commands and results. Do not use production as the
+first test environment.
 
 ### 7. Review
 
-Before committing, delegate the review to the `code-reviewer` sub-agent.
-The sub-agent has its own context window and reviews the uncommitted diff
-without bias from the implementation history.
-
-The sub-agent will report findings grouped by severity (P0/P1/P2). If
-findings are reported, return to step 5 (Implement) to address them, then
-test again before re-running the review.
-
-If the sub-agent reports no findings, proceed to commit.
+Review the complete diff for correctness, security, privacy, accessibility,
+upgrade conflicts, and unintended generated files. Resolve findings and rerun
+affected tests before committing.
 
 ### 8. Commit
 
-Pre-commit hooks run linting and validation automatically. If you changed
-the GraphQL schema or settings, the regenerate hook runs the appropriate
-generators automatically.
-
-**Standalone mode:** Use the prepared commit message from step 4
-(`/prepare-issue-branch` wrote it to `.git/COMMIT_EDITMSG`).
-
-**Attach mode:** Write a commit message that describes what this commit
-changed — no issue reference, no `Closes`/`Fixes` keywords. The parent
-story's MR carries the issue context; individual commits within it only
-need to describe their own change. Keep it short and conventional, e.g.
-`Add validation for empty subject on ticket form.`
+Use a concise imperative subject that describes the actual change. Keep each
+commit coherent and avoid private issue numbers, hostnames, addresses, or
+operational values in commit messages.
 
 ### 9. Merge Request
 
-**Standalone mode:** Use the `/create-mr` skill to push the branch and
-create a Merge Request on GitLab. It selects the correct MR template, fills
-in the sections, and targets the appropriate branch automatically.
+Push only after the user or maintainer authorizes it. Open a merge request in
+this project using the appropriate template. Include test evidence, manual
+verification, deployment impact, and rollback guidance. Human review is
+required before merge.
 
-**Attach mode:** Do _not_ invoke `/create-mr` — the MR for the parent story
-already exists.
+### 10. Deploy
 
-**Don't push automatically.** After committing, stop and wait. Tell the
-user what you committed and ask before pushing — every time. Pushing
-sends your commit to the team's MR and runs CI, so the user decides
-when that happens.
-
-Push only after the user confirms.
-
-CI runs automatically on MR creation (standalone) or push (attach). A human
-review is required before merging.
-
-### 10. Cherry-pick
-
-If the fix also applies to `stable`, use the `/cherry-pick-to-stable` skill
-after the MR is merged to `develop`.
+A merge is not deployment authorization. Promote the reviewed integration
+commit through the separate maintenance workflow: verified backup,
+non-production validation, source-drift check, controlled deployment, and
+post-deployment health and functional checks.
 
 ## Rules
 
-- Never push directly to `develop` or `stable`.
-- Never reference private issue numbers in public commits.
-- Never run the full test suite — always target specific files.
+- Do not push directly to `integration/customizations` during normal feature
+  work.
+- Never push to an upstream project repository.
+- Never configure automatic repository mirroring.
+- Never commit secrets, private configuration, branded assets, ticket data,
+  logs, database dumps, or backups.
+- Never run broad destructive commands against a deployment.
+- Keep package updates and application upgrades separate from feature work.

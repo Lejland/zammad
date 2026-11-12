@@ -70,9 +70,9 @@ pnpm generate-setting-types                       # Regenerate Config types afte
 
 ## Development Lifecycle
 
-Issues are tracked on **GitHub**, code is developed on a self-hosted **GitLab**.
-GitHub hosts a read-only mirror. The agent uses the **GitHub MCP server** for
-issues and **`glab` CLI** for GitLab operations.
+Issues, branches, reviews, and merge requests are managed within this project.
+Use `integration/customizations` as the base for customization work. Do not add
+cross-host remotes, mirroring jobs, repository URLs, or credentials.
 
 Stories are refined and broken down into task issues before this lifecycle
 starts (`/refine-story` → `/plan-story`). Bugs skip that and enter it directly.

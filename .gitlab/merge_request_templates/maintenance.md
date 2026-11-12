@@ -1,6 +1,6 @@
 # Specification
 
-<!--Insert the link to a GitHub issue in (), or describe the changes if there is no issue -->
+<!-- Link the issue in this project, or describe the change if no issue exists. -->
 [Issue Link]() <!-- markdownlint-disable-line -->
 
 ## Standards Compliance

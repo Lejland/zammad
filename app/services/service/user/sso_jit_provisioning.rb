@@ -1,12 +1,10 @@
 # Copyright (C) 2012-2026 Zammad Foundation, https://zammad-foundation.org/
 
-class Service::User::SsoJitProvisioning
+class Service::User::SsoJitProvisioning < Service::Base
   CONFIG_PATH = '/etc/zammad-sso/provisioning.json'.freeze
   LOGIN_LOCALPART_PATTERN = /\A[A-Za-z0-9._-]{1,128}\z/
 
-  def self.execute(...)
-    new(...).execute
-  end
+  attr_reader :login, :realname
 
   def initialize(login:, realname: nil)
     @login = login.to_s.strip.downcase

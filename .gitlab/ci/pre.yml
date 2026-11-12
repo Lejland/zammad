@@ -15,26 +15,6 @@
   script:
     - !reference [.scripts, pnpm_install_all]
   after_script: []
-
-'push to github':
-  stage: pre
-  cache: []
-  rules:
-    # Don't apply job filter here.
-    - if: $CI_COMMIT_REF_NAME =~ /^(private|cherry-pick-|revert-|renovate|dependabot)/
-      when: never
-    - when: always
-  before_script:
-    - test -d $HOME/.ssh || mkdir $HOME/.ssh
-    - ssh-keyscan github.com >> $HOME/.ssh/known_hosts
-    - eval $(ssh-agent -s)
-    - echo "$PUSH_TO_GITHUB_SSH_PRIVATE_KEY" | ssh-add -
-    - ssh-add -l
-  script:
-    - git fetch --unshallow
-    - script/build/sync_repo.sh git@github.com:zammad/zammad.git
-  after_script: []
-
 'publish source archives':
   stage: pre
   tags:

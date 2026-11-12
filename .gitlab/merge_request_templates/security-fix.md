@@ -1,6 +1,6 @@
 # Specification
 
-<!--Insert the link to a GitHub issue in (), or describe the changes if there is no issue -->
+<!-- Link the confidential issue in this project, or summarize the approved private report. -->
 [Issue Link]() <!-- markdownlint-disable-line -->
 
 ## Standards Compliance
