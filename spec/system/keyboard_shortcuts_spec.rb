@@ -219,6 +219,15 @@ RSpec.describe 'Keyboard Shortcuts', type: :system do
           expect(page).to have_css('.article-new .js-textarea', text: '')
         end
       end
+
+      it 'focuses the ticket tag input' do
+        send_keys([:shift, 't'])
+
+        within :active_content do
+          expect(page).to have_css('.js-tags .js-newTagInput:focus', visible: true)
+          expect(page).to have_no_css('.js-tags .js-newTagLabel', visible: true)
+        end
+      end
     end
 
     context 'for ticket reply' do

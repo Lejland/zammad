@@ -238,6 +238,17 @@ See [SSO JIT and Directory Integration](doc/customization/sso_jit_and_directory_
 
 See [Production Health Checks and Bad Gateway Recovery](doc/customization/production_health_checks.md).
 
+### 2026-11-13 - Ticket tag keyboard shortcut
+
+- Added `Shift+T` to focus the existing tag input while viewing an editable
+  ticket.
+- Reused the normal tag widget, including its permissions, autocomplete,
+  validation, and save behavior.
+- Scoped the shortcut outside text inputs and to ticket views so it does not
+  interfere with composing articles, browser shortcuts, or the existing plain
+  `T` administrator translation shortcut.
+- Added focused system coverage for the tag-input focus behavior.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.

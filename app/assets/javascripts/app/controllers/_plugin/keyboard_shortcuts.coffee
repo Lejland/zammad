@@ -496,6 +496,22 @@ App.Config.set(
                 App.Event.trigger('keyboard_shortcuts_close')
                 $('.active.content .editControls .js-selectInternalPublic').trigger('click')
             }
+            {
+              key: ['shift+t', 'shift+t']
+              keyDisplay: [['shift', 't'], ['shift', 't']]
+              hotkeys: [false, false]
+              onlyOutsideInputs: true
+              description: __('Add ticket tag')
+              globalEvent: 'ticket-tag-add'
+              callback: ->
+                return if !window.location.hash.match(/^#ticket\/zoom\/\d+/)
+
+                tagLabel = $('.active.content .js-tags .js-newTagLabel').first()
+                return if !tagLabel.get(0)
+
+                App.Event.trigger('keyboard_shortcuts_close')
+                tagLabel.trigger('click')
+            }
             #{
             #  key: 'm'
             #  hotkeys: [true, false]
