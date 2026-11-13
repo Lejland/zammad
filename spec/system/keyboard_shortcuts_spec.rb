@@ -84,6 +84,7 @@ RSpec.describe 'Keyboard Shortcuts', type: :system do
       it 'shows list of shortcuts' do
         in_modal do
           expect(page).to have_css('h1', text: 'Keyboard Shortcuts')
+          expect(page).to have_text('Add ticket tag')
         end
       end
 

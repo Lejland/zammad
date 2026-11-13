@@ -80,6 +80,23 @@ A deployment may expose short convenience routes such as `/signup` and `/login`
 while keeping the site root SSO-first. Their concrete redirects and hostnames are
 not part of this repository.
 
+For SSO sessions, `DELETE /api/v1/signout` returns the relative handoff URL
+`/auth/sso/logout`. The trusted reverse proxy should implement that exact route,
+clear the application session cookie, and redirect to the identity provider logout
+endpoint. Local-password, LDAP, SAML, and OIDC logout behavior is not changed by
+this handoff.
+
+Do not treat the mere presence of an application session cookie as proof that
+the session is valid after logout. If the reverse proxy uses cookie presence to
+let an established session load the application root, its SSO logout handoff
+must expire that cookie.
+
+If the identity provider changes its shared access-token format, a browser may
+arrive with a cookie that the validation adapter correctly rejects. Avoid a
+redirect loop by expiring only the rejected access cookie before redirecting to
+a fresh SSO login. Continue to fail closed if the replacement token is missing,
+invalid, expired, or revoked.
+
 ## Verification
 
 1. Run the focused specs:
@@ -96,7 +113,11 @@ not part of this repository.
 4. Verify an unmarked request cannot create a user.
 5. Verify a browser-supplied identity header cannot bypass the trusted proxy.
 6. Verify invalid, expired, or revoked SSO state is denied by the adapter.
-7. Verify local recovery access and external signup according to deployment
+7. Verify SSO logout clears both the application session and SSO access cookie,
+   then requires a fresh SSO login on the next visit.
+8. Verify a rejected legacy-format access cookie is replaced through SSO rather
+   than causing a redirect loop or exposing the application.
+9. Verify local recovery access and external signup according to deployment
    policy.
 
 For an SSO redirect that reaches `/auth/sso` but returns HTTP 502, verify the

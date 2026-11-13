@@ -34,4 +34,20 @@ RSpec.describe 'SSO JIT provisioning', type: :request do
     expect(Service::User::SsoJitProvisioning).not_to have_received(:execute)
     expect(response).to redirect_to('/#')
   end
+
+  it 'keeps non-SSO logout behavior unchanged' do
+    authenticated_as(user, via: :browser)
+
+    delete '/api/v1/signout'
+
+    expect(response.parsed_body).to eq({})
+  end
+
+  it 'hands an SSO logout to the trusted reverse proxy' do
+    get '/auth/sso', headers: { 'X-Forwarded-User' => user.login }
+
+    delete '/api/v1/signout'
+
+    expect(response.parsed_body).to eq('url' => '/auth/sso/logout')
+  end
 end

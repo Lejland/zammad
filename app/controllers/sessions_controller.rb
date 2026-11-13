@@ -94,6 +94,8 @@ class SessionsController < ApplicationController
     return saml_destroy if saml_session?
     return oidc_destroy if oidc_session?
 
+    sso_session = session[:authentication_type].to_s.casecmp?('SSO')
+
     reset_session
 
     # Remove the user id from the session
@@ -102,7 +104,7 @@ class SessionsController < ApplicationController
     # reset session
     request.env['rack.session.options'][:expire_after] = nil
 
-    render json: {}
+    render json: sso_session ? { url: '/auth/sso/logout' } : {}
   end
 
   def create_omniauth

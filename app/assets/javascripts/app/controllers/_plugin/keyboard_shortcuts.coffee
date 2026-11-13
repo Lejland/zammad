@@ -497,9 +497,11 @@ App.Config.set(
                 $('.active.content .editControls .js-selectInternalPublic').trigger('click')
             }
             {
-              key: ['shift+t', 'shift+t']
-              keyDisplay: [['shift', 't'], ['shift', 't']]
-              hotkeys: [false, false]
+              # This shortcut is identical in both layouts. Keeping it as one
+              # definition also makes it render consistently in the help list.
+              key: 'shift+t'
+              keyDisplay: [['shift', 't']]
+              hotkeys: false
               onlyOutsideInputs: true
               description: __('Add ticket tag')
               globalEvent: 'ticket-tag-add'

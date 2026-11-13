@@ -249,6 +249,19 @@ See [Production Health Checks and Bad Gateway Recovery](doc/customization/produc
   `T` administrator translation shortcut.
 - Added focused system coverage for the tag-input focus behavior.
 
+### 2026-11-13 - SSO logout handoff and shortcut help
+
+- Added a relative reverse-proxy handoff for SSO-authenticated logout while
+  preserving the existing local-password, LDAP, SAML, and OIDC behavior.
+- Documented safe application-cookie expiration and rejected legacy-token
+  recovery without tracking identity-provider URLs, domains, cookie names, or
+  other deployment configuration.
+- Kept strict identity matching by normalized email or directory login; display
+  names are deliberately not used to attach an SSO identity to a privileged
+  account.
+- Made the layout-independent `Shift+T` definition render consistently in the
+  keyboard-shortcut help and added help-dialog coverage.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
