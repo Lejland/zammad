@@ -99,6 +99,10 @@ not part of this repository.
 7. Verify local recovery access and external signup according to deployment
    policy.
 
+For an SSO redirect that reaches `/auth/sso` but returns HTTP 502, verify the
+application and database service chain before changing authentication settings.
+See [Production Health Checks and Bad Gateway Recovery](production_health_checks.md).
+
 ## Rollback
 
 Disable provisioning in the private runtime policy first. Restore the previous

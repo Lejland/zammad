@@ -220,6 +220,24 @@ zammad run rails runner script/custom/needs_owner_alert.rb
 
 See [SSO JIT and Directory Integration](doc/customization/sso_jit_and_directory_integration.md).
 
+### 2026-11-13 - Production health checks and 502 recovery
+
+- Added a reusable, configuration-free host health check for package-based
+  deployments.
+- Checked real Zammad and PostgreSQL instance units in addition to top-level
+  wrapper services.
+- Verified required listeners, current migrations, the reverse proxy, and the
+  direct Rails upstream.
+- Added a non-disclosing PostgreSQL TLS-key readability test for the database
+  service account.
+- Documented that an SSO redirect ending in HTTP 502 is an upstream availability
+  failure and must not be worked around by weakening authentication or changing
+  user roles.
+- Kept all production hostnames, domains, certificate material, credentials,
+  user identities, and private maintenance configuration outside Git.
+
+See [Production Health Checks and Bad Gateway Recovery](doc/customization/production_health_checks.md).
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.
