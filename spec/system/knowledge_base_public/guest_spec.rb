@@ -23,6 +23,19 @@ RSpec.describe 'Public Knowledge Base for guest', authenticated_as: false, type:
       end
     end
 
+    it 'switches and remembers the color theme' do
+      page.execute_script("localStorage.removeItem('knowledge-base-theme'); localStorage.removeItem('theme')")
+      page.refresh
+
+      expect(page.evaluate_script('document.documentElement.dataset.theme')).to eq('light')
+
+      find('.js-kb-theme-toggle').click
+
+      expect(page.evaluate_script('document.documentElement.dataset.theme')).to eq('dark')
+      expect(page.evaluate_script("localStorage.getItem('knowledge-base-theme')")).to eq('dark')
+      expect(find('.js-kb-theme-toggle')['aria-label']).to eq('Light mode')
+    end
+
     it 'does not show answer' do
       within '.main' do
         expect(page).to have_no_selector(:link_containing, published_answer.translation.title)

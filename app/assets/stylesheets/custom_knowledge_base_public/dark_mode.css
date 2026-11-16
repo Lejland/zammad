@@ -1,0 +1,227 @@
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.kb-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.kb-theme-toggle:hover,
+.kb-theme-toggle:focus-visible {
+  opacity: 1;
+  box-shadow: 0 0 0 2px currentColor;
+}
+
+.kb-theme-toggle-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.kb-theme-toggle-icon--light,
+html[data-theme='dark'] .kb-theme-toggle-icon--dark {
+  display: none;
+}
+
+html[data-theme='dark'] .kb-theme-toggle-icon--light {
+  display: inline;
+}
+
+.logo img {
+  transition: filter 120ms ease-in-out;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  color: hsl(210, 12%, 75%);
+  background: hsl(215, 12%, 13%);
+}
+
+html[data-theme='dark'] body,
+html[data-theme='dark'] .wrapper {
+  color: hsl(210, 12%, 75%);
+  background: hsl(215, 12%, 13%);
+}
+
+html[data-theme='dark'] .header,
+html[data-theme='dark'] .footer {
+  border-color: hsl(214, 10%, 28%);
+  background: hsl(216, 11%, 17%);
+}
+
+html[data-theme='dark'] .header .menu-item {
+  color: hsl(210, 15%, 88%);
+}
+
+html[data-theme='dark'] .logo img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html[data-theme='dark'] .search-field input[type='search'] {
+  color: hsl(210, 20%, 92%);
+  border-color: hsl(214, 10%, 32%);
+  background: hsl(216, 10%, 21%);
+}
+
+html[data-theme='dark'] .search-field input[type='search']::placeholder,
+html[data-theme='dark'] .search-message,
+html[data-theme='dark'] .result-category,
+html[data-theme='dark'] .result-preview,
+html[data-theme='dark'] .article-meta,
+html[data-theme='dark'] .article-accessories-title,
+html[data-theme='dark'] .attachment-size,
+html[data-theme='dark'] .not-published-note {
+  color: hsl(210, 8%, 62%);
+}
+
+html[data-theme='dark'] .search-field .icon {
+  fill: hsl(210, 15%, 82%);
+}
+
+html[data-theme='dark'] .result a:hover {
+  border-color: hsl(214, 10%, 32%);
+  background: hsl(216, 10%, 21%);
+}
+
+html[data-theme='dark'] .result-icon {
+  color: hsl(210, 8%, 58%);
+}
+
+html[data-theme='dark'] .result-title,
+html[data-theme='dark'] .main--categories h1,
+html[data-theme='dark'] .article,
+html[data-theme='dark'] .breadcrumb[href]:hover {
+  color: hsl(210, 20%, 92%);
+}
+
+html[data-theme='dark'] .main--categories h1 .icon-hashtag,
+html[data-theme='dark'] .article-accessories .icon {
+  fill: hsl(210, 8%, 58%);
+}
+
+html[data-theme='dark'] .breadcrumbs .container,
+html[data-theme='dark'] .article-accessories,
+html[data-theme='dark'] .attachment,
+html[data-theme='dark'] .sections + hr {
+  border-color: hsl(214, 10%, 28%);
+}
+
+html[data-theme='dark'] .breadcrumb::before,
+html[data-theme='dark'] .breadcrumb::after {
+  background: hsl(210, 12%, 75%);
+}
+
+html[data-theme='dark'] .sections-empty {
+  color: hsl(210, 8%, 62%);
+  border-color: hsl(214, 10%, 32%);
+}
+
+html[data-theme='dark'] .box,
+html[data-theme='dark'] .feedback,
+html[data-theme='dark'] .button,
+html[data-theme='dark'] .sections--list .section-inner,
+html[data-theme='dark'] .sections--grid .section-inner,
+html[data-theme='dark'] .sections--compact-text .section-inner {
+  color: hsl(210, 15%, 85%);
+  background: hsl(216, 10%, 19%);
+  box-shadow: 0 2px 10px hsla(0, 0%, 0%, 0.35);
+}
+
+html[data-theme='dark'] .article-nav-adjacent a {
+  color: hsl(210, 8%, 62%);
+  fill: hsl(210, 8%, 62%);
+}
+
+html[data-theme='dark'] .article-nav-adjacent a:hover {
+  color: hsl(210, 20%, 92%);
+  fill: hsl(210, 20%, 92%);
+}
+
+html[data-theme='dark'] .article-content table {
+  background: hsl(216, 10%, 17%);
+  box-shadow: 0 0 0 1px hsl(214, 10%, 30%), 0 2px hsl(214, 10%, 30%);
+}
+
+html[data-theme='dark'] .article-content td,
+html[data-theme='dark'] .article-content th {
+  border-color: hsl(214, 10%, 30%);
+}
+
+html[data-theme='dark'] .article-content th {
+  background: hsl(216, 10%, 23%);
+}
+
+html[data-theme='dark'] .article-content blockquote {
+  border-color: hsl(214, 10%, 38%);
+}
+
+html[data-theme='dark'] .article-content code,
+html[data-theme='dark'] .article-content pre {
+  color: hsl(210, 15%, 86%);
+  background: hsl(216, 12%, 10%);
+}
+
+html[data-theme='dark'] .article-content hr {
+  border-color: hsl(214, 10%, 30%);
+}
+
+html[data-theme='dark'] .kb-image-preview {
+  background: hsla(215, 12%, 9%, 0.94);
+}
+
+html[data-theme='dark'] .kb-image-preview-image {
+  border-color: hsl(214, 10%, 32%);
+  background: hsl(216, 10%, 19%);
+  box-shadow: 0 2px 10px hsla(0, 0%, 0%, 0.5);
+}
+
+html[data-theme='dark'] .attachment:hover {
+  background: hsl(216, 10%, 21%);
+}
+
+html[data-theme='dark'] .footer {
+  color: hsl(210, 8%, 62%);
+}
+
+html[data-theme='dark'] .btn,
+html[data-theme='dark'] .kb-theme-toggle {
+  border-color: hsla(0, 0%, 100%, 0.25);
+}
+
+html[data-theme='dark'] .dropdown-menu,
+html[data-theme='dark'] .dropdown-menu::before {
+  background: hsl(216, 10%, 19%);
+}
+
+html[data-theme='dark'] .dropdown-menu a {
+  color: hsl(210, 15%, 88%);
+}
+
+html[data-theme='dark'] .dropdown-menu a:hover,
+html[data-theme='dark'] .dropdown-menu a:focus {
+  background: hsl(216, 10%, 25%);
+}
+
+html[data-theme='dark'] .dropdown-menu li.is-disabled a {
+  color: hsl(210, 6%, 48%);
+}
+
+@media screen and (max-width: 920px) {
+  .header-actions {
+    justify-content: center;
+    width: 100%;
+  }
+}

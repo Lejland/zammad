@@ -13,6 +13,23 @@
 <meta charset="utf-8">
 <title><%= kb_public_page_title(@knowledge_base, @object, @page_title_error) %></title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<%= javascript_tag nonce: true do -%>
+  (function() {
+    try {
+      var theme = localStorage.getItem('knowledge-base-theme') || localStorage.getItem('theme');
+
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch (error) {
+      document.documentElement.dataset.theme = 'light';
+      document.documentElement.style.colorScheme = 'light';
+    }
+  })();
+<% end -%>
 <%= render partial: 'knowledge_base/public/feeds_header' if @knowledge_base.show_feed_icon %>
 <%= stylesheet_link_tag 'svg-dimensions.css', media: 'all' %>
 <%= stylesheet_link_tag 'font.css', media: 'all' %>
@@ -33,11 +50,19 @@
           <img src="/api/v1/system_assets/product_logo/<%= Setting.get('product_logo') %>">
         <% end %>
       </span>
-      <nav class="menu">
-        <% menu_items.location_header.each do |menu_item| %>
-          <%= link_to menu_item.title, menu_item.url, class: 'menu-item', target: menu_item.new_tab ? '_blank' : nil %>
-        <% end %>
-      </nav>
+      <div class="header-actions">
+        <nav class="menu">
+          <% menu_items.location_header.each do |menu_item| %>
+            <%= link_to menu_item.title, menu_item.url, class: 'menu-item', target: menu_item.new_tab ? '_blank' : nil %>
+          <% end %>
+        </nav>
+        <button class="kb-theme-toggle js-kb-theme-toggle" type="button"
+                aria-label="<%= zt('Dark mode') %>" title="<%= zt('Dark mode') %>"
+                data-dark-label="<%= zt('Dark mode') %>" data-light-label="<%= zt('Light mode') %>">
+          <span class="kb-theme-toggle-icon kb-theme-toggle-icon--dark" aria-hidden="true">&#9790;</span>
+          <span class="kb-theme-toggle-icon kb-theme-toggle-icon--light" aria-hidden="true">&#9728;</span>
+        </button>
+      </div>
     </div>
     <div class="container">
       <div class="search">
