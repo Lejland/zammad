@@ -262,6 +262,18 @@ See [Production Health Checks and Bad Gateway Recovery](doc/customization/produc
 - Made the layout-independent `Shift+T` definition render consistently in the
   keyboard-shortcut help and added help-dialog coverage.
 
+### 2026-11-16 - Public knowledge base theme
+
+- Added a light/dark theme control to the public knowledge base and retained the
+  visitor's selection locally in the browser.
+- Used the operating-system color preference until the visitor chooses a theme.
+- Supported an optional deployment-private light-theme logo at
+  `public/custom/knowledge-base-logo-light.png` while using Zammad's configured
+  product logo for dark mode.
+- Kept organization-specific logo files and branding outside Git.
+- Preserved the configured product logo as the fallback when no private
+  light-theme variant is installed.
+
 ## Upgrade procedure
 
 1. Fetch the matching upstream Zammad release tag.

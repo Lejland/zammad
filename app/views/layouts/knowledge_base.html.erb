@@ -45,9 +45,15 @@
 
   <header class="header js-header">
     <div class="container">
-      <span class="logo">
+      <% light_logo_path = Rails.root.join('public/custom/knowledge-base-logo-light.png') %>
+      <span class="logo<%= ' logo--themed' if File.file?(light_logo_path) %>">
         <%= link_to custom_path_if_needed(help_root_path(locale: params[:locale]), @knowledge_base) do %>
-          <img src="/api/v1/system_assets/product_logo/<%= Setting.get('product_logo') %>">
+          <% if File.file?(light_logo_path) %>
+            <img class="kb-logo kb-logo--light" src="/custom/knowledge-base-logo-light.png">
+            <img class="kb-logo kb-logo--dark" src="/api/v1/system_assets/product_logo/<%= Setting.get('product_logo') %>">
+          <% else %>
+            <img src="/api/v1/system_assets/product_logo/<%= Setting.get('product_logo') %>">
+          <% end %>
         <% end %>
       </span>
       <div class="header-actions">

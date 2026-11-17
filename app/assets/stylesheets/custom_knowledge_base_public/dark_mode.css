@@ -41,7 +41,11 @@ html[data-theme='dark'] .kb-theme-toggle-icon--light {
 }
 
 .logo img {
-  transition: filter 120ms ease-in-out;
+  transition: filter 120ms ease-in-out, opacity 120ms ease-in-out;
+}
+
+.logo--themed .kb-logo--dark {
+  display: none;
 }
 
 html[data-theme='dark'] {
@@ -66,8 +70,16 @@ html[data-theme='dark'] .header .menu-item {
   color: hsl(210, 15%, 88%);
 }
 
-html[data-theme='dark'] .logo img {
+html[data-theme='dark'] .logo:not(.logo--themed) img {
   filter: invert(1) hue-rotate(180deg);
+}
+
+html[data-theme='dark'] .logo--themed .kb-logo--light {
+  display: none;
+}
+
+html[data-theme='dark'] .logo--themed .kb-logo--dark {
+  display: block;
 }
 
 html[data-theme='dark'] .search-field input[type='search'] {
